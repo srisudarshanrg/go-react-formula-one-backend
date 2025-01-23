@@ -1,4 +1,4 @@
-package main
+package api
 
 import (
 	"encoding/json"
@@ -11,13 +11,13 @@ type JSONResponse struct {
 	Data    map[string]interface{} `json:"data,omitempty"`
 }
 
-func (app *application) writeJSON(w http.ResponseWriter, statusCode int, data interface{}) error {
+func (app *Application) writeJSON(w http.ResponseWriter, statusCode int, data interface{}) error {
 	out, err := json.Marshal(data)
 	if err != nil {
 		return err
 	}
 
-	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Content-Type", "Application/json")
 	w.WriteHeader(statusCode)
 	_, err = w.Write(out)
 	if err != nil {
@@ -27,7 +27,7 @@ func (app *application) writeJSON(w http.ResponseWriter, statusCode int, data in
 	return err
 }
 
-func (app *application) readJSON(r *http.Request, dataStore interface{}) error {
+func (app *Application) readJSON(r *http.Request, dataStore interface{}) error {
 	decoder := json.NewDecoder(r.Body)
 	decoder.DisallowUnknownFields()
 	err := decoder.Decode(dataStore)
@@ -38,7 +38,7 @@ func (app *application) readJSON(r *http.Request, dataStore interface{}) error {
 	return nil
 }
 
-func (app *application) errorJSON(w http.ResponseWriter, err error, status ...int) error {
+func (app *Application) errorJSON(w http.ResponseWriter, err error, status ...int) error {
 	statusCode := http.StatusBadRequest
 
 	if len(status) > 0 {

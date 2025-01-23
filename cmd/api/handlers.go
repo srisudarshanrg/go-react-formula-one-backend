@@ -1,14 +1,14 @@
-package main
+package api
 
 import (
 	"fmt"
 	"net/http"
 )
 
-func (app *application) Home(w http.ResponseWriter, r *http.Request) {
+func (app *Application) Home(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "Home")
 }
 
-func (app *application) Drivers(w http.ResponseWriter, r *http.Request) {
+func (app *Application) Drivers(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "Drivers")
 }

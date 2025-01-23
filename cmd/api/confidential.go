@@ -1,5 +1,5 @@
-package main
+package api
 
 const (
-	databasePassword = "velociraptor4796"
+	DatabasePassword = "velociraptor4796"
 )
