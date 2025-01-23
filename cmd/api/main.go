@@ -30,6 +30,7 @@ func main() {
 	app.Database = conn
 
 	log.Println(databasePassword)
+	log.Println("eee")
 
 	log.Println("Connected to Postgres Database")
 
