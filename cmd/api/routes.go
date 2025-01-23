@@ -7,7 +7,7 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 )
 
-func (app *application) routes() http.Handler {
+func routes() http.Handler {
 	mux := chi.NewRouter()
 
 	// middleware

@@ -25,7 +25,7 @@ func main() {
 	app.FrontendLink = "http://localhost:3000"
 	app.DatabaseDSN = fmt.Sprintf("host=postgresql-raptor.alwaysdata.net port=5432 dbname=raptor_formula_one user=raptor password=%s", databasePassword)
 
-	conn, err := app.ConnectDB()
+	conn, err := ConnectDB()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -36,7 +36,7 @@ func main() {
 	log.Println("Connected to Postgres Database")
 
 	log.Println("Application starting on localhost", port)
-	err = http.ListenAndServe(fmt.Sprintf(":%d", port), app.routes())
+	err = http.ListenAndServe(fmt.Sprintf(":%d", port), routes())
 	if err != nil {
 		log.Fatal(err)
 	}
