@@ -18,10 +18,6 @@ type application struct {
 var app application
 
 func main() {
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, "hello from formula one new backend")
-	})
-
 	app.FrontendLink = "http://localhost:3000"
 	app.DatabaseDSN = fmt.Sprintf("host=postgresql-raptor.alwaysdata.net port=5432 dbname=raptor_formula_one user=raptor password=%s", databasePassword)
 
