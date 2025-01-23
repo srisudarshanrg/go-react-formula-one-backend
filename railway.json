@@ -3,7 +3,7 @@
       "builder": "GO"
     },
     "deploy": {
-      "startCommand": "go run ./cmd/api"
+      "startCommand": "go run ."
     },
     "env": {
       "DATABASE_PASSWORD": "velociraptor4796"

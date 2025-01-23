@@ -29,6 +29,8 @@ func main() {
 
 	app.Database = conn
 
+	log.Println(databasePassword)
+
 	log.Println("Connected to Postgres Database")
 
 	log.Println("Application starting on localhost", port)
