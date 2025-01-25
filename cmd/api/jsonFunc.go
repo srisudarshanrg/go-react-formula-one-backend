@@ -17,7 +17,7 @@ func (app *Application) writeJSON(w http.ResponseWriter, statusCode int, data in
 		return err
 	}
 
-	w.Header().Set("Content-Type", "Application/json")
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(statusCode)
 	_, err = w.Write(out)
 	if err != nil {
@@ -38,13 +38,7 @@ func (app *Application) readJSON(r *http.Request, dataStore interface{}) error {
 	return nil
 }
 
-func (app *Application) errorJSON(w http.ResponseWriter, err error, status ...int) error {
-	statusCode := http.StatusBadRequest
-
-	if len(status) > 0 {
-		statusCode = status[0]
-	}
-
+func (app *Application) errorJSON(w http.ResponseWriter, err error, statusCode int) error {
 	var errorJSONData JSONResponse
 	errorJSONData.Error = true
 	errorJSONData.Message = err.Error()

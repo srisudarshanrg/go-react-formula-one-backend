@@ -3,7 +3,8 @@ package api
 import "database/sql"
 
 type Application struct {
-	FrontendLink string
-	DatabaseDSN  string
-	Database     *sql.DB
+	DevelopmentFrontendLink string
+	ProductionFrontendLink  string
+	DatabaseDSN             string
+	Database                *sql.DB
 }

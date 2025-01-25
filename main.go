@@ -13,7 +13,8 @@ const port = 10000
 var app api.Application
 
 func main() {
-	app.FrontendLink = "http://localhost:3000"
+	app.DevelopmentFrontendLink = "http://localhost:3001"
+	app.ProductionFrontendLink = "https://go-formula-one-frontend.vercel.app/"
 	app.DatabaseDSN = fmt.Sprintf("host=postgresql-raptor.alwaysdata.net port=5432 dbname=raptor_formula_one user=raptor password=%s", api.DatabasePassword)
 
 	conn, err := app.ConnectDB()

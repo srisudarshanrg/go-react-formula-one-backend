@@ -15,7 +15,7 @@ func (app *Application) Routes() http.Handler {
 	mux.Use(app.enableCORS)
 
 	// routes
-	mux.Get("/", app.Home)
+	mux.Get("/home", app.Home)
 	mux.Get("/drivers", app.Drivers)
 
 	return mux
