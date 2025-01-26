@@ -2,6 +2,7 @@ package api
 
 import "github.com/srisudarshanrg/go-react-formula-one-backend/internal/models"
 
+// GetCurrentDrivers gets all the drivers of F1 2024 from the database and returns them as a list
 func (app *Application) GetCurrentDrivers() ([]*models.CurrentDrivers, error) {
 	query := `select * from current_drivers`
 	rows, err := app.Database.Query(query)
@@ -35,6 +36,7 @@ func (app *Application) GetCurrentDrivers() ([]*models.CurrentDrivers, error) {
 	return drivers, nil
 }
 
+// GetCurrentTeams gets all the F1 2024 teams from the database and returns them as a list
 func (app *Application) GetCurrentTeams() ([]*models.CurrentTeams, error) {
 	query := `select * from current_teams`
 	rows, err := app.Database.Query(query)
@@ -67,6 +69,7 @@ func (app *Application) GetCurrentTeams() ([]*models.CurrentTeams, error) {
 	return teams, nil
 }
 
+// GetCurrentTracks gets all the F1 2024 tracks from the database and returns them as a list
 func (app *Application) GetCurrentTracks() ([]*models.CurrentTracks, error) {
 	query := `select * from current_tracks`
 	rows, err := app.Database.Query(query)
@@ -98,4 +101,18 @@ func (app *Application) GetCurrentTracks() ([]*models.CurrentTracks, error) {
 	}
 
 	return tracks, nil
+}
+
+// GetDriversByAchievement gets all drivers by decreasing order of number of a specific achievement passed as a parameter
+func (app *Application) GetDriversByAchievement(achievementName string) ([]*models.Driver, error) {
+	var drivers []*models.Driver
+
+	return drivers, nil
+}
+
+// GetTeamsByAchievement gets all teams by decreasing order of number of a specific achievement passed as a parameter
+func (app *Application) GetTeamsByAchievement(achievementName string) ([]*models.AllTeams, error) {
+	var teams []*models.AllTeams
+
+	return teams, nil
 }
