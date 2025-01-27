@@ -18,5 +18,7 @@ func (app *Application) Routes() http.Handler {
 	mux.Get("/home", app.Home)
 	mux.Get("/drivers", app.Drivers)
 
+	mux.Post("/search", app.search)
+
 	return mux
 }

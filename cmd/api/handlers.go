@@ -8,6 +8,50 @@ import (
 	"github.com/srisudarshanrg/go-react-formula-one-backend/internal/models"
 )
 
+func (app *Application) search(w http.ResponseWriter, r *http.Request) {
+	type searchRequestPayload struct {
+		SearchQuery string `json:"search_query"`
+	}
+	var payload searchRequestPayload
+
+	err := app.readJSON(r, &payload)
+	if err != nil {
+		log.Println(err)
+		app.errorJSON(w, err, http.StatusBadRequest)
+		return
+	}
+
+	log.Println(payload.SearchQuery)
+
+	type SearchData struct {
+		DriverSearch []*models.Driver        `json:"driver_search"`
+		TeamsSearch  []*models.AllTeams      `json:"team_search"`
+		TracksSearch []*models.CurrentTracks `json:"track_search"`
+		OK           string                  `json:"ok"`
+	}
+
+	drivers, teams, tracks, err := app.SearchDB(payload.SearchQuery)
+	if err != nil {
+		log.Println(err)
+		app.errorJSON(w, err, http.StatusBadRequest)
+		return
+	}
+
+	var searchData = SearchData{
+		DriverSearch: drivers,
+		TeamsSearch:  teams,
+		TracksSearch: tracks,
+		OK:           "Search data sent successfully from api!",
+	}
+
+	err = app.writeJSON(w, http.StatusOK, searchData)
+	if err != nil {
+		log.Println(err)
+		app.errorJSON(w, err, http.StatusBadRequest)
+		return
+	}
+}
+
 func (app *Application) Home(w http.ResponseWriter, r *http.Request) {
 	type HomeData struct {
 		CurrentDrivers []*models.CurrentDrivers `json:"current_drivers"`
@@ -40,17 +84,72 @@ func (app *Application) Home(w http.ResponseWriter, r *http.Request) {
 		CurrentDrivers: drivers,
 		CurrentTeams:   teams,
 		CurrentTracks:  tracks,
-		Ok:             "Data is being sent from api successfully",
+		Ok:             "Data is being sent from api successfully!",
 	}
-	app.writeJSON(w, http.StatusOK, data)
+	err = app.writeJSON(w, http.StatusOK, data)
+	if err != nil {
+		log.Println(err)
+		app.errorJSON(w, err, http.StatusBadRequest)
+		return
+	}
 }
 
 func (app *Application) Drivers(w http.ResponseWriter, r *http.Request) {
-	drivers, _ := app.GetCurrentDrivers()
-	data := struct {
-		Data interface{} `json:"data"`
-	}{
-		Data: drivers,
+	type DriversData struct {
+		CurrentDrivers       []*models.CurrentDrivers
+		DriversChampionships []*models.Driver
+		DriversWins          []*models.Driver
+		DriversPodiums       []*models.Driver
+		DriversPoles         []*models.Driver
 	}
-	app.writeJSON(w, http.StatusOK, data)
+
+	currentDrivers, err := app.GetCurrentDrivers()
+	if err != nil {
+		log.Println(err)
+		app.errorJSON(w, err, http.StatusBadRequest)
+		return
+	}
+
+	driversChampionships, err := app.GetDriversByAchievement("championships")
+	if err != nil {
+		log.Println(err)
+		app.errorJSON(w, err, http.StatusBadRequest)
+		return
+	}
+
+	driversWins, err := app.GetDriversByAchievement("wins")
+	if err != nil {
+		log.Println(err)
+		app.errorJSON(w, err, http.StatusBadRequest)
+		return
+	}
+
+	driversPodiums, err := app.GetDriversByAchievement("podiums")
+	if err != nil {
+		log.Println(err)
+		app.errorJSON(w, err, http.StatusBadRequest)
+		return
+	}
+
+	driversPoles, err := app.GetDriversByAchievement("pole_positions")
+	if err != nil {
+		log.Println(err)
+		app.errorJSON(w, err, http.StatusBadRequest)
+		return
+	}
+
+	data := DriversData{
+		CurrentDrivers:       currentDrivers,
+		DriversChampionships: driversChampionships,
+		DriversWins:          driversWins,
+		DriversPodiums:       driversPodiums,
+		DriversPoles:         driversPoles,
+	}
+
+	err = app.writeJSON(w, http.StatusOK, data)
+	if err != nil {
+		log.Println(err)
+		app.errorJSON(w, err, http.StatusBadRequest)
+		return
+	}
 }
