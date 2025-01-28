@@ -6,11 +6,12 @@ import (
 	"github.com/srisudarshanrg/go-react-formula-one-backend/internal/models"
 )
 
-func (app *Application) SearchDB(searchQuery string) ([]*models.Driver, []*models.AllTeams, []*models.CurrentTracks, error) {
-	var drivers []*models.Driver
-	var teams []*models.AllTeams
-	var tracks []*models.CurrentTracks
+func (app *Application) SearchDB(searchQuery string) ([]models.Driver, []models.AllTeams, []models.CurrentTracks, error) {
+	var drivers []models.Driver
+	var teams []models.AllTeams
+	var tracks []models.CurrentTracks
 
+	searchQuery = "%" + searchQuery + "%"
 	queryDrivers := `select * from drivers where lower(name) like $1`
 	rowsDrivers, err := app.Database.Query(queryDrivers, searchQuery)
 	if err != nil {
@@ -52,7 +53,7 @@ func (app *Application) SearchDB(searchQuery string) ([]*models.Driver, []*model
 		if err != nil {
 			return nil, nil, nil, err
 		}
-		drivers = append(drivers, &driver)
+		drivers = append(drivers, driver)
 	}
 
 	for rowsTeams.Next() {
@@ -74,12 +75,12 @@ func (app *Application) SearchDB(searchQuery string) ([]*models.Driver, []*model
 		if err != nil {
 			return nil, nil, nil, err
 		}
-		teams = append(teams, &team)
+		teams = append(teams, team)
 	}
 
 	for rowsTracks.Next() {
 		var track models.CurrentTracks
-		err = rowsTeams.Scan(
+		err = rowsTracks.Scan(
 			&track.ID,
 			&track.Name,
 			&track.Length,
@@ -95,8 +96,7 @@ func (app *Application) SearchDB(searchQuery string) ([]*models.Driver, []*model
 		if err != nil {
 			return nil, nil, nil, err
 		}
-
-		tracks = append(tracks, &track)
+		tracks = append(tracks, track)
 	}
 
 	return drivers, teams, tracks, nil

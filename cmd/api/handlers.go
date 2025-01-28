@@ -24,10 +24,10 @@ func (app *Application) search(w http.ResponseWriter, r *http.Request) {
 	log.Println(payload.SearchQuery)
 
 	type SearchData struct {
-		DriverSearch []*models.Driver        `json:"driver_search"`
-		TeamsSearch  []*models.AllTeams      `json:"team_search"`
-		TracksSearch []*models.CurrentTracks `json:"track_search"`
-		OK           string                  `json:"ok"`
+		DriverSearch []models.Driver        `json:"driver_search"`
+		TeamsSearch  []models.AllTeams      `json:"team_search"`
+		TracksSearch []models.CurrentTracks `json:"track_search"`
+		OK           string                 `json:"ok"`
 	}
 
 	drivers, teams, tracks, err := app.SearchDB(payload.SearchQuery)
