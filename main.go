@@ -26,7 +26,7 @@ func main() {
 	app.Database = conn
 	log.Println("Connected to Postgres Database")
 
-	log.Println("Application starting on localhost", port)
+	log.Println("Application starting on localhost:", port)
 	err = http.ListenAndServe(fmt.Sprintf(":%d", port), app.Routes())
 	if err != nil {
 		log.Fatal(err)
