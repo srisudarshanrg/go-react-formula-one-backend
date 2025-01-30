@@ -17,8 +17,10 @@ func (app *Application) Routes() http.Handler {
 	// routes
 	mux.Get("/home", app.Home)
 	mux.Get("/drivers", app.Drivers)
+	mux.Get("/teams", app.Teams)
 
 	mux.Post("/search", app.search)
+	mux.Post("/compare", app.compare)
 
 	return mux
 }

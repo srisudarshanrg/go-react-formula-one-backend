@@ -52,6 +52,10 @@ func (app *Application) search(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (app *Application) compare(w http.ResponseWriter, r *http.Request) {
+
+}
+
 func (app *Application) Home(w http.ResponseWriter, r *http.Request) {
 	type HomeData struct {
 		CurrentDrivers []*models.CurrentDrivers `json:"current_drivers"`
@@ -96,11 +100,12 @@ func (app *Application) Home(w http.ResponseWriter, r *http.Request) {
 
 func (app *Application) Drivers(w http.ResponseWriter, r *http.Request) {
 	type DriversData struct {
-		CurrentDrivers       []*models.CurrentDrivers
-		DriversChampionships []*models.Driver
-		DriversWins          []*models.Driver
-		DriversPodiums       []*models.Driver
-		DriversPoles         []*models.Driver
+		CurrentDrivers       []*models.CurrentDrivers `json:"current_drivers"`
+		DriversChampionships []models.Driver          `json:"drivers_championships"`
+		DriversWins          []models.Driver          `json:"drivers_wins"`
+		DriversPodiums       []models.Driver          `json:"drivers_podiums"`
+		DriversPoles         []models.Driver          `json:"drivers_poles"`
+		OK                   string                   `json:"ok"`
 	}
 
 	currentDrivers, err := app.GetCurrentDrivers()
@@ -144,12 +149,75 @@ func (app *Application) Drivers(w http.ResponseWriter, r *http.Request) {
 		DriversWins:          driversWins,
 		DriversPodiums:       driversPodiums,
 		DriversPoles:         driversPoles,
+		OK:                   "Get data successfully sent from drivers backend api!",
 	}
 
 	err = app.writeJSON(w, http.StatusOK, data)
 	if err != nil {
 		log.Println(err)
 		app.errorJSON(w, err, http.StatusBadRequest)
+		return
+	}
+}
+
+func (app *Application) Teams(w http.ResponseWriter, r *http.Request) {
+	type TeamsData struct {
+		TeamsChampionships []models.AllTeams      `json:"teams_championships"`
+		TeamsWins          []models.AllTeams      `json:"teams_wins"`
+		TeamsPodiums       []models.AllTeams      `json:"teams_podiums"`
+		TeamsPoles         []models.AllTeams      `json:"teams_poles"`
+		CurrentTeams       []*models.CurrentTeams `json:"current_teams"`
+		OK                 string                 `json:"ok"`
+	}
+
+	teamsChampionships, err := app.GetTeamsByAchievement("championships")
+	if err != nil {
+		log.Println(err)
+		app.writeJSON(w, http.StatusBadRequest, err)
+		return
+	}
+
+	teamsWins, err := app.GetTeamsByAchievement("wins")
+	if err != nil {
+		log.Println(err)
+		app.writeJSON(w, http.StatusBadRequest, err)
+		return
+	}
+
+	teamsPodiums, err := app.GetTeamsByAchievement("podiums")
+	if err != nil {
+		log.Println(err)
+		app.writeJSON(w, http.StatusBadRequest, err)
+		return
+	}
+
+	teamsPoles, err := app.GetTeamsByAchievement("poles")
+	if err != nil {
+		log.Println(err)
+		app.writeJSON(w, http.StatusBadRequest, err)
+		return
+	}
+
+	currentTeams, err := app.GetCurrentTeams()
+	if err != nil {
+		log.Println(err)
+		app.writeJSON(w, http.StatusBadRequest, err)
+		return
+	}
+
+	var data = TeamsData{
+		TeamsChampionships: teamsChampionships,
+		TeamsWins:          teamsWins,
+		TeamsPodiums:       teamsPodiums,
+		TeamsPoles:         teamsPoles,
+		CurrentTeams:       currentTeams,
+		OK:                 "Get data successfully sent from teams backend api!",
+	}
+
+	err = app.writeJSON(w, http.StatusOK, data)
+	if err != nil {
+		log.Println(err)
+		app.writeJSON(w, http.StatusBadRequest, err)
 		return
 	}
 }

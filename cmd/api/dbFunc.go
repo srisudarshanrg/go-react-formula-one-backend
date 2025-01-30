@@ -205,7 +205,7 @@ func (app *Application) GetCurrentTracks() ([]*models.CurrentTracks, error) {
 }
 
 // GetDriversByAchievement gets all drivers by decreasing order of number of a specific achievement passed as a parameter
-func (app *Application) GetDriversByAchievement(achievementName string) ([]*models.Driver, error) {
+func (app *Application) GetDriversByAchievement(achievementName string) ([]models.Driver, error) {
 	query := fmt.Sprintf("select * from drivers where %s > 0 order by %s desc", achievementName, achievementName)
 	rows, err := app.Database.Query(query)
 	if err != nil {
@@ -213,7 +213,7 @@ func (app *Application) GetDriversByAchievement(achievementName string) ([]*mode
 	}
 	defer rows.Close()
 
-	var drivers []*models.Driver
+	var drivers []models.Driver
 
 	for rows.Next() {
 		var driver models.Driver
@@ -236,15 +236,15 @@ func (app *Application) GetDriversByAchievement(achievementName string) ([]*mode
 			return nil, err
 		}
 
-		drivers = append(drivers, &driver)
+		drivers = append(drivers, driver)
 	}
 
 	return drivers, nil
 }
 
 // GetTeamsByAchievement gets all teams by decreasing order of number of a specific achievement passed as a parameter
-func (app *Application) GetTeamsByAchievement(achievementName string) ([]*models.AllTeams, error) {
-	var teams []*models.AllTeams
+func (app *Application) GetTeamsByAchievement(achievementName string) ([]models.AllTeams, error) {
+	var teams []models.AllTeams
 
 	query := fmt.Sprintf("select * from all_teams where %s > 0 order by %s desc", achievementName, achievementName)
 	rows, err := app.Database.Query(query)
@@ -272,6 +272,7 @@ func (app *Application) GetTeamsByAchievement(achievementName string) ([]*models
 		if err != nil {
 			return nil, err
 		}
+		teams = append(teams, team)
 	}
 
 	return teams, nil
