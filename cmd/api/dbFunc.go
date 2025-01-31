@@ -138,7 +138,7 @@ func (app *Application) GetCurrentDrivers() ([]*models.CurrentDrivers, error) {
 
 // GetCurrentTeams gets all the F1 2024 teams from the database and returns them as a list
 func (app *Application) GetCurrentTeams() ([]*models.CurrentTeams, error) {
-	query := `select * from current_teams`
+	query := `select * from current_teams order by id asc`
 	rows, err := app.Database.Query(query)
 	if err != nil {
 		return nil, err
