@@ -2,6 +2,7 @@ package api
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/srisudarshanrg/go-react-formula-one-backend/internal/models"
 )
@@ -11,7 +12,7 @@ func (app *Application) SearchDB(searchQuery string) ([]models.Driver, []models.
 	var teams []models.AllTeams
 	var tracks []models.CurrentTracks
 
-	searchQuery = "%" + searchQuery + "%"
+	searchQuery = "%" + strings.ToLower(searchQuery) + "%"
 	queryDrivers := `select * from drivers where lower(name) like $1`
 	rowsDrivers, err := app.Database.Query(queryDrivers, searchQuery)
 	if err != nil {
